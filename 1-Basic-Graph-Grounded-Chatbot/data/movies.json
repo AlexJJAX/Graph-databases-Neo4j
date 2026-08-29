@@ -1,0 +1,98 @@
+[
+  {
+    "movieId": "portfolio-the-matrix-1999",
+    "title": "The Matrix",
+    "releasedYear": 1999,
+    "imdbRating": 8.7,
+    "runtimeMinutes": 136,
+    "votes": 2100000,
+    "overview": "A computer hacker discovers that the world he knows is a simulated reality and joins a rebellion against its controllers.",
+    "directors": ["Lana Wachowski", "Lilly Wachowski"],
+    "cast": [
+      {"name": "Keanu Reeves", "billingOrder": 1},
+      {"name": "Laurence Fishburne", "billingOrder": 2},
+      {"name": "Carrie-Anne Moss", "billingOrder": 3}
+    ],
+    "genres": ["Action", "Sci-Fi"]
+  },
+  {
+    "movieId": "portfolio-inception-2010",
+    "title": "Inception",
+    "releasedYear": 2010,
+    "imdbRating": 8.8,
+    "runtimeMinutes": 148,
+    "votes": 2600000,
+    "overview": "A specialist who steals information through shared dreams is offered a chance to erase his past by planting an idea in a target's mind.",
+    "directors": ["Christopher Nolan"],
+    "cast": [
+      {"name": "Leonardo DiCaprio", "billingOrder": 1},
+      {"name": "Joseph Gordon-Levitt", "billingOrder": 2},
+      {"name": "Elliot Page", "billingOrder": 3}
+    ],
+    "genres": ["Action", "Sci-Fi", "Thriller"]
+  },
+  {
+    "movieId": "portfolio-interstellar-2014",
+    "title": "Interstellar",
+    "releasedYear": 2014,
+    "imdbRating": 8.7,
+    "runtimeMinutes": 169,
+    "votes": 2200000,
+    "overview": "Explorers travel through a wormhole in space in an attempt to secure humanity's future as Earth becomes less habitable.",
+    "directors": ["Christopher Nolan"],
+    "cast": [
+      {"name": "Matthew McConaughey", "billingOrder": 1},
+      {"name": "Anne Hathaway", "billingOrder": 2},
+      {"name": "Jessica Chastain", "billingOrder": 3}
+    ],
+    "genres": ["Adventure", "Drama", "Sci-Fi"]
+  },
+  {
+    "movieId": "portfolio-arrival-2016",
+    "title": "Arrival",
+    "releasedYear": 2016,
+    "imdbRating": 7.9,
+    "runtimeMinutes": 116,
+    "votes": 800000,
+    "overview": "A linguist works with the military to communicate with alien visitors and understand the purpose of their arrival.",
+    "directors": ["Denis Villeneuve"],
+    "cast": [
+      {"name": "Amy Adams", "billingOrder": 1},
+      {"name": "Jeremy Renner", "billingOrder": 2},
+      {"name": "Forest Whitaker", "billingOrder": 3}
+    ],
+    "genres": ["Drama", "Mystery", "Sci-Fi"]
+  },
+  {
+    "movieId": "portfolio-blade-runner-2049-2017",
+    "title": "Blade Runner 2049",
+    "releasedYear": 2017,
+    "imdbRating": 8.0,
+    "runtimeMinutes": 164,
+    "votes": 700000,
+    "overview": "A young blade runner uncovers a long-buried secret that leads him to a former officer who has been missing for decades.",
+    "directors": ["Denis Villeneuve"],
+    "cast": [
+      {"name": "Ryan Gosling", "billingOrder": 1},
+      {"name": "Harrison Ford", "billingOrder": 2},
+      {"name": "Ana de Armas", "billingOrder": 3}
+    ],
+    "genres": ["Drama", "Mystery", "Sci-Fi"]
+  },
+  {
+    "movieId": "portfolio-the-dark-knight-2008",
+    "title": "The Dark Knight",
+    "releasedYear": 2008,
+    "imdbRating": 9.0,
+    "runtimeMinutes": 152,
+    "votes": 3000000,
+    "overview": "A masked vigilante faces a criminal mastermind whose campaign of chaos tests the hero's limits and the city's institutions.",
+    "directors": ["Christopher Nolan"],
+    "cast": [
+      {"name": "Christian Bale", "billingOrder": 1},
+      {"name": "Heath Ledger", "billingOrder": 2},
+      {"name": "Aaron Eckhart", "billingOrder": 3}
+    ],
+    "genres": ["Action", "Crime", "Drama"]
+  }
+]

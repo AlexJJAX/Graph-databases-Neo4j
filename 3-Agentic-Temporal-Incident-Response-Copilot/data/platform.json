@@ -1,0 +1,95 @@
+{
+  "platform": {
+    "platformId": "northstar-commerce",
+    "name": "Northstar Commerce",
+    "description": "A synthetic cloud-commerce platform used for bounded incident investigations."
+  },
+  "teams": [
+    {"teamId": "team-edge", "name": "Edge Experience", "channel": "#team-edge"},
+    {"teamId": "team-orders", "name": "Order Journey", "channel": "#team-orders"},
+    {"teamId": "team-money", "name": "Money Movement", "channel": "#team-money"},
+    {"teamId": "team-catalog", "name": "Catalog Intelligence", "channel": "#team-catalog"}
+  ],
+  "services": [
+    {"serviceId": "edge-gateway", "name": "Edge Gateway", "tier": 1, "layer": 0, "description": "Routes storefront traffic and enforces edge policy.", "teamId": "team-edge", "dependsOn": [{"serviceId": "checkout-api", "criticality": "critical"}, {"serviceId": "catalog-api", "criticality": "high"}]},
+    {"serviceId": "checkout-api", "name": "Checkout API", "tier": 1, "layer": 1, "description": "Coordinates checkout validation, inventory reservation, and payment authorization.", "teamId": "team-orders", "dependsOn": [{"serviceId": "cart-service", "criticality": "high"}, {"serviceId": "payment-api", "criticality": "critical"}, {"serviceId": "inventory-api", "criticality": "critical"}]},
+    {"serviceId": "cart-service", "name": "Cart Service", "tier": 2, "layer": 2, "description": "Maintains active baskets and pricing snapshots.", "teamId": "team-orders", "dependsOn": [{"serviceId": "inventory-api", "criticality": "high"}]},
+    {"serviceId": "payment-api", "name": "Payment API", "tier": 1, "layer": 2, "description": "Authorizes and captures card payments.", "teamId": "team-money", "dependsOn": [{"serviceId": "fraud-service", "criticality": "critical"}]},
+    {"serviceId": "fraud-service", "name": "Fraud Service", "tier": 2, "layer": 3, "description": "Scores payment attempts before authorization.", "teamId": "team-money", "dependsOn": []},
+    {"serviceId": "inventory-api", "name": "Inventory API", "tier": 1, "layer": 3, "description": "Reserves stock and exposes regional availability.", "teamId": "team-orders", "dependsOn": []},
+    {"serviceId": "catalog-api", "name": "Catalog API", "tier": 2, "layer": 1, "description": "Serves product detail and merchandising data.", "teamId": "team-catalog", "dependsOn": [{"serviceId": "search-service", "criticality": "medium"}]},
+    {"serviceId": "search-service", "name": "Search Service", "tier": 2, "layer": 2, "description": "Ranks catalog search results.", "teamId": "team-catalog", "dependsOn": []},
+    {"serviceId": "notification-worker", "name": "Notification Worker", "tier": 3, "layer": 0, "description": "Consumes completed-order events and sends receipts.", "teamId": "team-edge", "dependsOn": [{"serviceId": "checkout-api", "criticality": "medium"}]}
+  ],
+  "commits": [
+    {"sha": "c1042", "summary": "Reduce payment authorization timeout from 3000 ms to 800 ms", "author": "Mina Shah"},
+    {"sha": "c1041", "summary": "Add edge request correlation headers", "author": "Leo Brooks"},
+    {"sha": "c1040", "summary": "Refresh payment provider certificates", "author": "Iris Chen"},
+    {"sha": "c0870", "summary": "Enable three immediate checkout payment retries", "author": "Mina Shah"},
+    {"sha": "c0630", "summary": "Increase inventory cache TTL to fifteen minutes", "author": "Owen Price"},
+    {"sha": "c0410", "summary": "Send synchronous fraud feature enrichment requests", "author": "Iris Chen"},
+    {"sha": "c0200", "summary": "Tune catalog search result window", "author": "Sara Diaz"}
+  ],
+  "deployments": [
+    {"deploymentId": "dep-1042", "serviceId": "checkout-api", "sha": "c1042", "version": "2026.07.18.3", "environment": "production", "status": "succeeded", "deployedAt": "2026-07-18T14:03:00+00:00"},
+    {"deploymentId": "dep-1041", "serviceId": "edge-gateway", "sha": "c1041", "version": "2026.07.18.2", "environment": "production", "status": "succeeded", "deployedAt": "2026-07-18T12:50:00+00:00"},
+    {"deploymentId": "dep-1040", "serviceId": "payment-api", "sha": "c1040", "version": "2026.07.18.1", "environment": "production", "status": "succeeded", "deployedAt": "2026-07-18T11:30:00+00:00"},
+    {"deploymentId": "dep-0870", "serviceId": "checkout-api", "sha": "c0870", "version": "2026.04.09.5", "environment": "production", "status": "rolled-back", "deployedAt": "2026-04-09T09:42:00+00:00"},
+    {"deploymentId": "dep-0630", "serviceId": "inventory-api", "sha": "c0630", "version": "2026.02.14.2", "environment": "production", "status": "rolled-back", "deployedAt": "2026-02-14T16:12:00+00:00"},
+    {"deploymentId": "dep-0410", "serviceId": "fraud-service", "sha": "c0410", "version": "2025.11.22.8", "environment": "production", "status": "rolled-back", "deployedAt": "2025-11-22T20:01:00+00:00"},
+    {"deploymentId": "dep-0200", "serviceId": "search-service", "sha": "c0200", "version": "2025.08.01.4", "environment": "production", "status": "succeeded", "deployedAt": "2025-08-01T10:15:00+00:00"}
+  ],
+  "incidents": [
+    {"incidentId": "INC-104", "title": "Checkout authorization timeouts", "severity": "SEV-1", "status": "investigating", "startedAt": "2026-07-18T14:09:00+00:00", "endedAt": null, "summary": "Checkout success fell while payment latency remained within its normal band.", "impactedServices": ["checkout-api", "edge-gateway"], "precededBy": ["dep-1042", "dep-1041", "dep-1040"], "alertIds": ["ALT-1041", "ALT-1042", "ALT-1043"]},
+    {"incidentId": "INC-087", "title": "Retry storm amplified payment errors", "severity": "SEV-1", "status": "resolved", "startedAt": "2026-04-09T09:48:00+00:00", "endedAt": "2026-04-09T10:21:00+00:00", "summary": "Immediate checkout retries multiplied payment-provider load.", "impactedServices": ["checkout-api", "payment-api", "edge-gateway"], "precededBy": ["dep-0870"], "alertIds": ["ALT-0871", "ALT-0872"]},
+    {"incidentId": "INC-063", "title": "Stale inventory reservations", "severity": "SEV-2", "status": "resolved", "startedAt": "2026-02-14T16:31:00+00:00", "endedAt": "2026-02-14T17:18:00+00:00", "summary": "An extended cache lifetime served stale availability during a stock event.", "impactedServices": ["inventory-api", "cart-service", "checkout-api"], "precededBy": ["dep-0630"], "alertIds": ["ALT-0631", "ALT-0632"]},
+    {"incidentId": "INC-041", "title": "Fraud enrichment latency blocked payments", "severity": "SEV-1", "status": "resolved", "startedAt": "2025-11-22T20:08:00+00:00", "endedAt": "2025-11-22T20:44:00+00:00", "summary": "Synchronous enrichment exhausted fraud-service workers and delayed authorizations.", "impactedServices": ["fraud-service", "payment-api", "checkout-api"], "precededBy": ["dep-0410"], "alertIds": ["ALT-0411", "ALT-0412"]}
+  ],
+  "alerts": [
+    {"alertId": "ALT-1041", "incidentId": "INC-104", "serviceId": "checkout-api", "name": "Checkout success below 92%", "metric": "checkout.success_rate", "value": 71.4, "unit": "percent", "firedAt": "2026-07-18T14:09:00+00:00", "clearedAt": null},
+    {"alertId": "ALT-1042", "incidentId": "INC-104", "serviceId": "checkout-api", "name": "Authorization timeout spike", "metric": "checkout.payment_timeout_rate", "value": 24.8, "unit": "percent", "firedAt": "2026-07-18T14:10:00+00:00", "clearedAt": null},
+    {"alertId": "ALT-1043", "incidentId": "INC-104", "serviceId": "payment-api", "name": "Payment p95 normal", "metric": "payment.authorization_p95", "value": 640, "unit": "milliseconds", "firedAt": "2026-07-18T14:12:00+00:00", "clearedAt": null},
+    {"alertId": "ALT-0871", "incidentId": "INC-087", "serviceId": "payment-api", "name": "Provider request volume high", "metric": "payment.provider_rps", "value": 1880, "unit": "requests_per_second", "firedAt": "2026-04-09T09:48:00+00:00", "clearedAt": "2026-04-09T10:19:00+00:00"},
+    {"alertId": "ALT-0872", "incidentId": "INC-087", "serviceId": "checkout-api", "name": "Checkout retry rate high", "metric": "checkout.retry_rate", "value": 42.1, "unit": "percent", "firedAt": "2026-04-09T09:49:00+00:00", "clearedAt": "2026-04-09T10:20:00+00:00"},
+    {"alertId": "ALT-0631", "incidentId": "INC-063", "serviceId": "inventory-api", "name": "Reservation conflict rate high", "metric": "inventory.reservation_conflict_rate", "value": 18.2, "unit": "percent", "firedAt": "2026-02-14T16:31:00+00:00", "clearedAt": "2026-02-14T17:16:00+00:00"},
+    {"alertId": "ALT-0632", "incidentId": "INC-063", "serviceId": "cart-service", "name": "Cart availability mismatch", "metric": "cart.availability_mismatch", "value": 12.7, "unit": "percent", "firedAt": "2026-02-14T16:34:00+00:00", "clearedAt": "2026-02-14T17:17:00+00:00"},
+    {"alertId": "ALT-0411", "incidentId": "INC-041", "serviceId": "fraud-service", "name": "Fraud worker saturation", "metric": "fraud.worker_utilization", "value": 99.2, "unit": "percent", "firedAt": "2025-11-22T20:08:00+00:00", "clearedAt": "2025-11-22T20:42:00+00:00"},
+    {"alertId": "ALT-0412", "incidentId": "INC-041", "serviceId": "payment-api", "name": "Authorization p95 high", "metric": "payment.authorization_p95", "value": 4820, "unit": "milliseconds", "firedAt": "2025-11-22T20:10:00+00:00", "clearedAt": "2025-11-22T20:43:00+00:00"}
+  ],
+  "runbooks": [
+    {"runbookId": "RB-CHECKOUT-TIMEOUTS", "title": "Checkout timeout triage", "serviceIds": ["checkout-api", "payment-api"], "sections": [
+      {"heading": "Establish the failing boundary", "text": "Compare checkout timeout rate with payment authorization latency. If checkout timeouts rise while payment p95 stays below 800 milliseconds, inspect the checkout client timeout and the most recent checkout deployment before escalating to the payment provider."},
+      {"heading": "Safe checks", "text": "Diff the active checkout configuration against the preceding version. Inspect timeout and retry values. A rollback is a proposed mitigation only after the deployment correlation is confirmed by an operator."},
+      {"heading": "Disconfirming signal", "text": "If payment authorization p95 rises above 2500 milliseconds across providers, treat the provider or payment path as the primary hypothesis rather than a checkout-client timeout."}
+    ]},
+    {"runbookId": "RB-BLAST-RADIUS", "title": "Dependency blast-radius assessment", "serviceIds": ["edge-gateway", "checkout-api", "cart-service", "payment-api", "inventory-api"], "sections": [
+      {"heading": "Trace dependants", "text": "Start from the degraded service and traverse incoming DEPENDS_ON relationships to at most three hops. Prioritize tier-one dependants and report asynchronous consumers separately from synchronous request paths."},
+      {"heading": "Validate impact", "text": "A topology path represents plausible exposure, not observed failure. Confirm each service with an alert, error-rate change, or user-journey signal before declaring it impacted."}
+    ]},
+    {"runbookId": "RB-INVENTORY-CONFLICTS", "title": "Inventory reservation conflict triage", "serviceIds": ["inventory-api", "cart-service"], "sections": [
+      {"heading": "Cache validation", "text": "Compare cache TTL and reservation conflict rate around the first alert. Purge or rollback only after confirming stale version tokens in sampled reservation responses."},
+      {"heading": "Downstream checks", "text": "Inspect cart availability mismatch and checkout inventory-rejection rate. Preserve the distinction between cached availability and the authoritative reservation result."}
+    ]},
+    {"runbookId": "RB-FRAUD-LATENCY", "title": "Fraud scoring latency triage", "serviceIds": ["fraud-service", "payment-api"], "sections": [
+      {"heading": "Worker saturation", "text": "Inspect fraud worker utilization, enrichment dependency latency, and queue age. Synchronous enrichment can propagate latency to payment authorization even when the provider is healthy."},
+      {"heading": "Containment proposal", "text": "Propose disabling optional synchronous enrichment or restoring the prior worker policy. Execution requires human approval and a change record."}
+    ]}
+  ],
+  "postmortems": [
+    {"postmortemId": "PM-087", "incidentId": "INC-087", "title": "INC-087 — Retry storm after checkout release", "sections": [
+      {"heading": "Root cause", "text": "Deployment dep-0870 enabled three immediate payment retries in Checkout API. A transient provider error therefore became four near-simultaneous requests, saturating the payment path and reducing checkout success."},
+      {"heading": "Evidence", "text": "Checkout retry rate and provider request volume rose six minutes after deployment. Payment latency increased with request volume. Rolling back dep-0870 returned both signals to baseline."},
+      {"heading": "Learning", "text": "Retries require exponential backoff, jitter, and a shared budget. A recent deployment plus correlated downstream saturation is stronger evidence than deployment timing alone."}
+    ]},
+    {"postmortemId": "PM-063", "incidentId": "INC-063", "title": "INC-063 — Inventory cache served stale availability", "sections": [
+      {"heading": "Root cause", "text": "Deployment dep-0630 increased Inventory API cache TTL from one minute to fifteen minutes. During a stock event, carts displayed stale availability and authoritative reservations failed."},
+      {"heading": "Evidence", "text": "Reservation conflicts rose nineteen minutes after deployment, followed by cart availability mismatches. Payment latency and fraud-service health remained normal."},
+      {"heading": "Learning", "text": "Availability caches must preserve stock-version tokens and use event-driven invalidation. A cart symptom can originate in the inventory dependency rather than Cart Service itself."}
+    ]},
+    {"postmortemId": "PM-041", "incidentId": "INC-041", "title": "INC-041 — Synchronous fraud enrichment exhausted workers", "sections": [
+      {"heading": "Root cause", "text": "Deployment dep-0410 moved optional fraud feature enrichment into the synchronous scoring path. Slow enrichment calls saturated fraud workers and propagated latency through Payment API to Checkout API."},
+      {"heading": "Evidence", "text": "Fraud worker utilization reached 99 percent before payment authorization p95 crossed four seconds. Disabling synchronous enrichment restored worker capacity and payment latency."},
+      {"heading": "Learning", "text": "Graph topology identified the propagation path fraud-service to payment-api to checkout-api to edge-gateway. Each hop was confirmed with its own telemetry before inclusion in the observed blast radius."}
+    ]}
+  ]
+}

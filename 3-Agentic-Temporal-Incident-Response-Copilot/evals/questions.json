@@ -1,0 +1,42 @@
+[
+  {
+    "id": "current-change-correlation",
+    "question": "Investigate INC-104. What changed immediately before it and what is the leading hypothesis?",
+    "expectedTools": ["get_incident_context", "get_recent_changes"],
+    "expectedSourceIds": ["dep-1042"],
+    "expectedTerms": ["timeout", "800"],
+    "maxToolCalls": 7
+  },
+  {
+    "id": "payment-blast-radius",
+    "question": "During INC-104, what is the plausible blast radius if payment-api is the degraded service? Separate exposure from observed impact.",
+    "expectedTools": ["get_incident_context", "trace_blast_radius"],
+    "expectedSourceIds": ["blast:payment-api:checkout-api"],
+    "expectedTerms": ["checkout"],
+    "maxToolCalls": 7
+  },
+  {
+    "id": "historical-analogue",
+    "question": "Which historical incident is most similar to INC-104, and which evidence supports or weakens that comparison?",
+    "expectedTools": ["get_incident_context", "find_similar_incidents"],
+    "expectedSourceIds": ["postmortem:PM-087:00", "postmortem:PM-041:00"],
+    "expectedTerms": [],
+    "maxToolCalls": 7
+  },
+  {
+    "id": "safe-next-check",
+    "question": "For INC-104, what is the safest diagnostic check to run next without executing a remediation?",
+    "expectedTools": ["get_incident_context", "get_runbooks"],
+    "expectedSourceIds": ["runbook:RB-CHECKOUT-TIMEOUTS:01"],
+    "expectedTerms": ["configuration"],
+    "maxToolCalls": 7
+  },
+  {
+    "id": "inventory-causal-path",
+    "question": "Explain the causal and propagation evidence for INC-063, including what remained normal.",
+    "expectedTools": ["get_incident_context", "get_recent_changes", "search_operational_evidence"],
+    "expectedSourceIds": ["dep-0630", "postmortem:PM-063:01"],
+    "expectedTerms": ["inventory"],
+    "maxToolCalls": 8
+  }
+]

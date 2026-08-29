@@ -1,0 +1,34 @@
+[
+  {
+    "id": "ring-triangulation",
+    "question": "Investigate ALRT-9001. Identify shared identifiers, trace the flow, test for a directed cycle, and distinguish observation from inference.",
+    "expectedTools": ["get_alert_context", "find_shared_identifiers", "trace_fund_flows", "detect_transaction_cycles"],
+    "expectedSourceIds": ["D-900", "T-9003"],
+    "expectedTerms": ["cycle", "signal"],
+    "maxToolCalls": 8
+  },
+  {
+    "id": "cash-out",
+    "question": "For ALRT-9002, measure merchant concentration and compare the observed pattern with the relevant digital-goods typology.",
+    "expectedTools": ["get_alert_context", "measure_merchant_concentration", "search_fraud_evidence"],
+    "expectedSourceIds": ["M-900", "fraud:TYPO-003:00"],
+    "expectedTerms": ["merchant", "outgoing"],
+    "maxToolCalls": 7
+  },
+  {
+    "id": "benign-household",
+    "question": "Review ALRT-1001. What evidence supports a benign household explanation, and what remains uncertain?",
+    "expectedTools": ["get_alert_context", "find_shared_identifiers", "search_fraud_evidence"],
+    "expectedSourceIds": ["D-001", "fraud:BENIGN-RPT-1001:01"],
+    "expectedTerms": ["benign", "household"],
+    "maxToolCalls": 7
+  },
+  {
+    "id": "historical-comparison",
+    "question": "Which historical case most resembles ALRT-9001, which features overlap, and why is similarity not a determination?",
+    "expectedTools": ["get_alert_context", "find_similar_cases"],
+    "expectedSourceIds": ["fraud:CASE-RPT-8001:02"],
+    "expectedTerms": ["similarity", "not"],
+    "maxToolCalls": 6
+  }
+]

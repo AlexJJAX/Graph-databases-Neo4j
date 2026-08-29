@@ -1,0 +1,42 @@
+name: Run unit Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  unit-tests:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Set up UV
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - name: Install dependencies
+        run: uv sync --locked --dev
+
+      - name: Run offline unit tests
+        run: |
+          uv run --no-sync pytest -q 1-Basic-Graph-Grounded-Chatbot/tests
+          uv run --no-sync pytest -q 2-Hybrid-GraphRAG-Research-Assistant/tests
+          uv run --no-sync pytest -q 3-Agentic-Temporal-Incident-Response-Copilot/tests
+          uv run --no-sync pytest -q 4-Graph-Native-Fraud-Intelligence-Copilot/tests

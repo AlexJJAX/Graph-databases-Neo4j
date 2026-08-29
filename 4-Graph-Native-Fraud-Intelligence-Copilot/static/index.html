@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A graph-native, evidence-grounded fraud investigation workbench.">
+    <title>Northstar FI · Signal Circuit</title>
+    <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/static/styles.css?v=4.0.1">
+  </head>
+  <body>
+    <a class="skip-link" href="#questionInput">Skip to investigation prompt</a>
+    <header class="masthead">
+      <div class="brand">
+        <div class="brand-glyph" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        <div><p class="kicker">Northstar Financial · Intelligence graph</p><h1>Signal Circuit</h1></div>
+      </div>
+      <div class="runtime" aria-label="Runtime status">
+        <span class="status-dot" id="statusDot"></span><span id="statusText">Connecting</span>
+        <span class="rule"></span><span id="modelName">Agent model</span>
+        <span class="mode-pill">Evidence only</span><span class="mode-pill amber">No auto-action</span>
+      </div>
+    </header>
+
+    <main class="workbench" id="workbench">
+      <aside class="queue-column" id="queueColumn" aria-label="Alert queue and investigation prompt">
+        <section class="queue-head">
+          <div class="section-title"><div><p class="kicker">Alert queue</p><h2>Signals awaiting review</h2></div><span class="counter" id="alertCount">—</span></div>
+          <label class="search-shell"><span class="sr-only">Filter alerts</span><input id="alertFilter" type="search" placeholder="Filter alerts or accounts"></label>
+        </section>
+        <div class="alert-list" id="alertList" aria-live="polite"></div>
+        <section class="prompt-dock">
+          <div class="prompt-heading"><div><p class="kicker">Investigation thread</p><strong id="threadLabel">New graph memory</strong></div><button class="text-button" id="newThreadButton" type="button">Reset</button></div>
+          <div class="conversation" id="conversation" aria-live="polite">
+            <div class="note system"><span>Grounding rule</span><p>Observed facts, graph patterns, typology matches, and assessment remain separate.</p></div>
+          </div>
+          <div class="suggestions" id="suggestions" aria-label="Example questions"></div>
+          <form id="investigationForm">
+            <label for="questionInput">Ask the investigation agent</label>
+            <textarea id="questionInput" rows="4" maxlength="1800" required placeholder="Trace the connections. What is observed, inferred, and still missing?"></textarea>
+            <div class="prompt-actions"><span>6-round evidence budget</span><button id="investigateButton" class="primary" type="submit">Run investigation <b aria-hidden="true">↗</b></button></div>
+          </form>
+        </section>
+      </aside>
+
+      <div class="resizer" id="leftResizer" role="separator" tabindex="0" aria-orientation="vertical" aria-label="Resize alert queue" aria-controls="queueColumn graphColumn"></div>
+
+      <section class="graph-column" id="graphColumn" aria-label="Fraud network and transaction timeline">
+        <div class="graph-header">
+          <div><p class="kicker">Entity resolution canvas</p><h2 id="networkTitle">Select an alert to map its circuit</h2></div>
+          <div class="legend" aria-label="Graph legend">
+            <span><i class="dot person"></i>Person</span><span><i class="dot signal"></i>Shared signal</span>
+            <span><i class="dot account"></i>Account</span><span><i class="dot merchant"></i>Merchant</span>
+          </div>
+          <div class="graph-actions"><button id="zoomOutButton" aria-label="Zoom out">−</button><button id="resetGraphButton">Fit</button><button id="zoomInButton" aria-label="Zoom in">+</button></div>
+        </div>
+        <div class="canvas-wrap" id="canvasWrap">
+          <div class="lane-labels" aria-hidden="true"><span>Identity</span><span>Shared signals</span><span>Accounts</span><span>Destinations</span></div>
+          <svg id="networkSvg" viewBox="0 0 1040 570" role="img" aria-labelledby="networkSvgTitle">
+            <title id="networkSvgTitle">Fraud investigation entity and money-flow network</title>
+            <defs>
+              <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10Z"></path></marker>
+              <filter id="nodeShadow"><feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity=".15"/></filter>
+            </defs>
+            <g id="networkViewport"></g>
+          </svg>
+          <div class="canvas-empty" id="canvasEmpty"><div class="radar" aria-hidden="true"><i></i><i></i><i></i></div><strong>No circuit selected</strong><span>Choose an alert from the queue.</span></div>
+          <aside class="node-inspector" id="nodeInspector" hidden></aside>
+        </div>
+        <section class="timeline" aria-labelledby="timelineTitle">
+          <div class="timeline-head"><div><p class="kicker">Value movement</p><h3 id="timelineTitle">Transaction sequence</h3></div><span id="timelineSummary">No observed flows</span></div>
+          <div class="timeline-strip" id="timelineStrip"></div>
+        </section>
+        <footer class="graph-stats" aria-label="Graph statistics">
+          <span><strong id="personStat">—</strong> people</span><span><strong id="accountStat">—</strong> accounts</span>
+          <span><strong id="transactionStat">—</strong> transactions</span><span><strong id="caseStat">—</strong> cases</span>
+          <span><strong id="chunkStat">—</strong> evidence chunks</span>
+        </footer>
+      </section>
+
+      <div class="resizer" id="rightResizer" role="separator" tabindex="0" aria-orientation="vertical" aria-label="Resize investigator dossier" aria-controls="graphColumn dossierColumn"></div>
+
+      <aside class="dossier-column" id="dossierColumn" aria-label="Grounded fraud investigation dossier">
+        <div class="dossier-head">
+          <div><p class="kicker">Grounded dossier</p><h2 id="reportTitle">Awaiting evidence</h2></div>
+          <div class="risk-stamp" id="riskStamp"><small>Risk</small><strong>—</strong><span>— confidence</span></div>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Dossier views">
+          <button class="tab active" type="button" role="tab" aria-selected="true" data-tab="report">Assessment</button>
+          <button class="tab" type="button" role="tab" aria-selected="false" data-tab="evidence">Evidence <span id="evidenceBadge">0</span></button>
+          <button class="tab" type="button" role="tab" aria-selected="false" data-tab="trace">Agent trace <span id="traceBadge">0</span></button>
+        </div>
+        <div class="dossier-body">
+          <section class="tab-panel active" id="reportPanel" role="tabpanel">
+            <div class="empty-report" id="emptyReport"><span class="monogram">FI</span><h3>Evidence before assessment</h3><p>Run an investigation to build a cited case theory with visible uncertainty and counter-evidence.</p></div>
+            <div id="reportContent" hidden></div>
+          </section>
+          <section class="tab-panel" id="evidencePanel" role="tabpanel" hidden><div class="evidence-list" id="evidenceList"></div></section>
+          <section class="tab-panel" id="tracePanel" role="tabpanel" hidden><ol class="trace-list" id="traceList"></ol></section>
+        </div>
+        <footer class="dossier-footer" id="dossierFooter" hidden><span><b id="toolMetric">0</b> tool calls</span><span><b id="sourceMetric">0</b> sources</span><span><b id="latencyMetric">0s</b> elapsed</span><span class="review-pass">✓ grounding review</span></footer>
+      </aside>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="/static/app.js?v=4.0.1" defer></script>
+  </body>
+</html>

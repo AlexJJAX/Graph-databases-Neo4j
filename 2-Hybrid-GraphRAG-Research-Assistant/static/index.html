@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="A hybrid GraphRAG workbench for exploring foundational AI research."
+    />
+    <title>Neo4j · vector + full-text + graph traversal</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23152238'/%3E%3Ccircle cx='20' cy='22' r='6' fill='%232457f5'/%3E%3Ccircle cx='44' cy='18' r='5' fill='%23ff6b5e'/%3E%3Ccircle cx='39' cy='45' r='7' fill='%2358bd93'/%3E%3Cpath d='M25 21l14-2m3 4l-2 15M24 27l10 13' stroke='white' stroke-width='3'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="/static/styles.css" />
+    <script src="/static/app.js" defer></script>
+  </head>
+  <body>
+    <div class="paper-grid" aria-hidden="true"></div>
+    <header class="masthead">
+      <a class="identity" href="/" aria-label="Research Signal home">
+        <span class="identity-mark">HGR</span>
+        <span>
+          <strong>Neo4j · Vector + Full-text + Graph Traversal Assistant DEMO</strong>
+          <small>Local Neo4j & OpenAI Responses API | Hybrid GraphRAG </small>
+        </span>
+      </a>
+      <div class="system-strip" aria-label="Corpus status">
+        <span><b>Curated Corpus Status:</b></span>
+        <span><b id="paper-count">—</b> papers</span>
+        <span><b id="chunk-count">—</b> chunks</span>
+        <span><b id="topic-count">—</b> topics</span>
+        <span id="ready-state" class="status-pill">Checking graph</span>
+      </div>
+    </header>
+
+    <main class="workbench">
+      <section class="inquiry-column" aria-labelledby="page-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><strong>Semantic recall</strong>, <strong>structural evidence</strong></p>
+          <h1 id="page-title">Ask the literature.<br /><em>Inspect the path.</em></h1>
+          <p>
+            Query concepts or exact terms, then trace evidence across papers,
+            methods, authors, datasets, and citation networks.
+          </p>
+        </div>
+
+        <form id="question-form" class="query-card">
+          <label for="question">Research question</label>
+          <textarea
+            id="question"
+            name="question"
+            rows="4"
+            minlength="3"
+            maxlength="1200"
+            placeholder="How does retrieval-augmented generation combine parametric and non-parametric memory?"
+            required
+          ></textarea>
+
+          <div class="filter-row">
+            <label>
+              <span>Topic</span>
+              <select id="topic" name="topic">
+                <option value="">All topics</option>
+              </select>
+            </label>
+            <label>
+              <span>From</span>
+              <input id="year-from" name="year-from" type="number" min="1900" max="2100" placeholder="2017" />
+            </label>
+            <label>
+              <span>To</span>
+              <input id="year-to" name="year-to" type="number" min="1900" max="2100" placeholder="2024" />
+            </label>
+            <label>
+              <span>Evidence</span>
+              <select id="top-k" name="top-k">
+                <option value="3">3 chunks</option>
+                <option value="5" selected>5 chunks</option>
+                <option value="8">8 chunks</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="query-actions">
+            <button id="ask-button" class="ask-button" type="submit">
+              <span>Trace an answer</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 12h13M14 7l5 5-5 5" />
+              </svg>
+            </button>
+            <span class="query-hint">Hybrid search · 65% semantic / 35% lexical</span>
+          </div>
+        </form>
+
+        <div class="examples-block">
+          <p>Quick Question cards:</p>
+          <div id="examples" class="example-list" aria-label="Example questions"></div>
+        </div>
+
+        <section id="answer-panel" class="answer-panel is-empty" aria-live="polite">
+          <div class="answer-heading">
+            <div>
+              <p class="eyebrow">Grounded synthesis</p>
+              <h2>Answer</h2>
+            </div>
+            <button id="copy-answer" class="text-button" type="button" hidden>Copy</button>
+          </div>
+          <div id="answer-content" class="answer-content">
+            <p class="empty-copy">Your answer will appear here with clickable evidence markers.</p>
+          </div>
+          <div id="metrics" class="metrics" hidden></div>
+        </section>
+      </section>
+
+      <aside class="evidence-column" aria-label="Retrieved evidence">
+        <section class="constellation-card">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Evidence constellation</p>
+              <h2>Why this context?</h2>
+            </div>
+            <div class="constellation-actions">
+              <div class="legend" aria-label="Graph legend">
+                <span><i class="paper-dot"></i>Paper</span>
+                <span><i class="concept-dot"></i>Concept</span>
+                <span><i class="chunk-dot"></i>Excerpt</span>
+              </div>
+              <button
+                id="open-constellation"
+                class="inspect-button"
+                type="button"
+                aria-haspopup="dialog"
+                aria-controls="constellation-modal"
+                disabled
+              >
+                <svg viewBox="0 0 20 20" aria-hidden="true">
+                  <path d="M7.25 3.5H3.5v3.75M12.75 3.5h3.75v3.75M7.25 16.5H3.5v-3.75M12.75 16.5h3.75v-3.75" />
+                </svg>
+                Inspect graph
+              </button>
+            </div>
+          </div>
+          <div class="graph-stage">
+            <svg id="evidence-graph" viewBox="0 0 640 420" role="img" aria-label="Retrieved evidence graph">
+              <g class="idle-graph" aria-hidden="true">
+                <path d="M90 230 220 120 355 205 505 100 555 280 390 340 205 315Z" />
+                <circle cx="90" cy="230" r="8" />
+                <circle cx="220" cy="120" r="12" />
+                <circle cx="355" cy="205" r="7" />
+                <circle cx="505" cy="100" r="10" />
+                <circle cx="555" cy="280" r="7" />
+                <circle cx="390" cy="340" r="11" />
+                <circle cx="205" cy="315" r="6" />
+              </g>
+            </svg>
+            <p id="graph-caption">Relationships appear after retrieval.</p>
+          </div>
+        </section>
+
+        <section class="evidence-ledger">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Source ledger</p>
+              <h2>Retrieved excerpts</h2>
+            </div>
+            <span id="evidence-total" class="count-chip">0</span>
+          </div>
+          <div id="evidence-list" class="evidence-list">
+            <article class="ledger-empty">
+              <span>R—</span>
+              <p>No evidence retrieved yet.</p>
+            </article>
+          </div>
+        </section>
+      </aside>
+    </main>
+
+    <dialog id="constellation-modal" class="constellation-modal" aria-labelledby="constellation-modal-title">
+      <section class="constellation-inspector">
+        <header class="inspector-header">
+          <div class="inspector-title">
+            <p class="eyebrow">Evidence constellation · inspection view</p>
+            <h2 id="constellation-modal-title">Follow the evidence path</h2>
+            <p>Follow the semantic bands, drag to pan, or select any node for its full label and role.</p>
+          </div>
+          <div class="inspector-toolbar" role="toolbar" aria-label="Graph view controls">
+            <button id="reset-constellation" type="button" title="Reset view (0)">Reset</button>
+            <button
+              id="toggle-relationship-labels"
+              type="button"
+              aria-pressed="false"
+              title="Show or hide all relationship labels"
+            >Relations</button>
+            <button id="zoom-out-constellation" class="icon-control" type="button" aria-label="Zoom out" title="Zoom out (-)">−</button>
+            <output id="constellation-zoom" aria-live="polite">100%</output>
+            <button id="zoom-in-constellation" class="icon-control" type="button" aria-label="Zoom in" title="Zoom in (+)">+</button>
+            <button id="close-constellation" class="close-control" type="button" aria-label="Close evidence constellation">Close</button>
+          </div>
+        </header>
+
+        <div
+          id="expanded-graph-stage"
+          class="expanded-graph-stage"
+          tabindex="0"
+          aria-label="Expanded evidence graph arranged in semantic bands. Use plus and minus to zoom and arrow keys to pan."
+          aria-keyshortcuts="+ - 0 ArrowUp ArrowDown ArrowLeft ArrowRight"
+        >
+          <svg
+            id="expanded-evidence-graph"
+            viewBox="0 0 640 420"
+            role="img"
+            aria-label="Expanded retrieved evidence graph"
+          ></svg>
+          <p class="gesture-note"><span>Hover</span> relation · <span>Drag</span> pan · <span>Select</span> inspect</p>
+        </div>
+
+        <aside id="graph-selection" class="graph-selection" aria-live="polite">
+          <span class="selection-kicker">Inspection point</span>
+          <div>
+            <strong>Select a node or relationship</strong>
+            <p>Its role in the retrieved evidence path will appear here.</p>
+          </div>
+        </aside>
+      </section>
+    </dialog>
+
+    <footer>
+      <span>Neo4j · vector + full-text + graph traversal</span>
+      <span>AI can make mistakes | Answers are limited to retrieved evidence.</span>
+    </footer>
+  </body>
+</html>

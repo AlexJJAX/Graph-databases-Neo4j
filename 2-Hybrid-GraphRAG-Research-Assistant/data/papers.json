@@ -1,0 +1,210 @@
+[
+  {
+    "paperId": "attention-2017",
+    "title": "Attention Is All You Need",
+    "year": 2017,
+    "sourceUrl": "https://arxiv.org/abs/1706.03762",
+    "abstract": "Introduces the Transformer, an encoder-decoder architecture based on attention rather than recurrent or convolutional sequence processing.",
+    "authors": ["Ashish Vaswani", "Noam Shazeer", "Niki Parmar", "Jakob Uszkoreit", "Llion Jones", "Aidan N. Gomez", "Lukasz Kaiser", "Illia Polosukhin"],
+    "topics": ["Language Models", "Sequence Modeling", "Transformers"],
+    "methods": ["Multi-Head Attention", "Positional Encoding", "Scaled Dot-Product Attention", "Transformer"],
+    "datasets": ["WMT 2014 English-German", "WMT 2014 English-French"],
+    "cites": [],
+    "sections": [
+      {
+        "heading": "Problem",
+        "text": "Sequence transduction systems had commonly relied on recurrent or convolutional networks. Recurrence processes tokens in order, which restricts within-example parallelism and makes long dependency paths difficult. Attention was already used to connect encoders and decoders, but it usually complemented a recurrent backbone rather than replacing it. The paper asks whether attention alone can provide the structure required for translation and other sequence tasks."
+      },
+      {
+        "heading": "Architecture",
+        "text": "The Transformer replaces recurrence and convolution with stacked self-attention and position-wise feed-forward layers. Scaled dot-product attention compares queries with keys and uses the resulting weights to combine values. Multiple attention heads learn different relationships in parallel. Because the model has no recurrence, positional encodings inject token-order information. Masking in the decoder prevents a position from using future target tokens during training."
+      },
+      {
+        "heading": "Evidence and significance",
+        "text": "On WMT 2014 English-to-German and English-to-French translation, the architecture achieved strong BLEU results while allowing substantially more parallel training than recurrent systems. The central contribution is therefore both representational and computational: token interactions have short paths through self-attention, and all positions can be processed together. This design became the foundation for later pretrained language models including BERT."
+      }
+    ]
+  },
+  {
+    "paperId": "bert-2018",
+    "title": "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+    "year": 2018,
+    "sourceUrl": "https://arxiv.org/abs/1810.04805",
+    "abstract": "Presents a deeply bidirectional Transformer encoder pretrained on unlabeled text and fine-tuned for diverse language-understanding tasks.",
+    "authors": ["Jacob Devlin", "Ming-Wei Chang", "Kenton Lee", "Kristina Toutanova"],
+    "topics": ["Language Models", "Pretraining", "Transformers"],
+    "methods": ["Masked Language Modeling", "Next Sentence Prediction", "Transformer Encoder"],
+    "datasets": ["GLUE", "MultiNLI", "SQuAD 1.1", "SQuAD 2.0", "SWAG"],
+    "cites": ["attention-2017"],
+    "sections": [
+      {
+        "heading": "Problem",
+        "text": "Earlier pretrained representations were often unidirectional or combined separately trained left-to-right and right-to-left models. That limits how completely every token can condition on both its preceding and following context. BERT targets reusable language understanding representations that can be adapted to many tasks with minimal task-specific architecture changes."
+      },
+      {
+        "heading": "Pretraining method",
+        "text": "BERT uses the Transformer encoder to build bidirectional token representations. Masked language modeling hides a subset of input tokens and trains the model to reconstruct them from surrounding context. A next-sentence objective predicts whether two segments followed one another in the source corpus. After pretraining, a small output layer and task data are sufficient to fine-tune the same backbone for classification, inference, and extractive question answering."
+      },
+      {
+        "heading": "Evaluation",
+        "text": "The paper reports results across eleven natural-language processing tasks. Its evaluations include GLUE and MultiNLI for language understanding, SQuAD 1.1 and 2.0 for question answering, and SWAG for commonsense inference. The results demonstrated that a single pretrained bidirectional Transformer could transfer effectively across substantially different task formats."
+      }
+    ]
+  },
+  {
+    "paperId": "dpr-2020",
+    "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+    "year": 2020,
+    "sourceUrl": "https://arxiv.org/abs/2004.04906",
+    "abstract": "Shows that a trained dual encoder can retrieve passages for open-domain question answering using dense representations rather than sparse term matching alone.",
+    "authors": ["Vladimir Karpukhin", "Barlas Oguz", "Sewon Min", "Patrick Lewis", "Ledell Wu", "Sergey Edunov", "Danqi Chen", "Wen-tau Yih"],
+    "topics": ["Dense Retrieval", "Open-Domain Question Answering", "Retrieval-Augmented Generation"],
+    "methods": ["Dual Encoder", "Dense Passage Retrieval", "In-Batch Negatives"],
+    "datasets": ["Natural Questions", "TriviaQA", "WebQuestions", "CuratedTREC"],
+    "cites": ["bert-2018"],
+    "sections": [
+      {
+        "heading": "Retrieval problem",
+        "text": "Open-domain question answering must search a large text collection before a reader can extract an answer. Sparse approaches such as BM25 depend strongly on exact lexical overlap between a question and a passage. This can miss semantically relevant passages that use different vocabulary. Dense Passage Retrieval tests whether learned representations can provide an effective first-stage retriever at Wikipedia scale."
+      },
+      {
+        "heading": "Dual-encoder method",
+        "text": "DPR uses one encoder for questions and another for passages. Training brings a question vector close to its relevant passage vector while separating negatives, including other passages in the same batch. Passage vectors can be computed in advance and stored in an approximate nearest-neighbor index. At query time, retrieval becomes a vector-similarity search followed by a reader over the highest-ranked candidates."
+      },
+      {
+        "heading": "Evaluation",
+        "text": "The retriever was evaluated on Natural Questions, TriviaQA, WebQuestions, and CuratedTREC. The paper reports higher top-20 retrieval accuracy than a strong Lucene BM25 baseline on most settings and improved end-to-end question-answering results. DPR later provided the dense non-parametric memory used by retrieval-augmented generation systems."
+      }
+    ]
+  },
+  {
+    "paperId": "rag-2020",
+    "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+    "year": 2020,
+    "sourceUrl": "https://arxiv.org/abs/2005.11401",
+    "abstract": "Combines a pretrained sequence generator with a learned retriever over an external Wikipedia passage index so generation can use explicit non-parametric memory.",
+    "authors": ["Patrick Lewis", "Ethan Perez", "Aleksandra Piktus", "Fabio Petroni", "Vladimir Karpukhin", "Naman Goyal", "Heinrich Kuttler", "Mike Lewis", "Wen-tau Yih", "Tim Rocktaschel", "Sebastian Riedel", "Douwe Kiela"],
+    "topics": ["Knowledge-Intensive NLP", "Open-Domain Question Answering", "Retrieval-Augmented Generation"],
+    "methods": ["Dense Passage Retrieval", "Non-Parametric Memory", "Sequence-to-Sequence Generation"],
+    "datasets": ["Natural Questions", "TriviaQA", "WebQuestions", "CuratedTREC"],
+    "cites": ["bert-2018", "dpr-2020"],
+    "sections": [
+      {
+        "heading": "Motivation",
+        "text": "A language model can store knowledge in its parameters, but parametric memory is difficult to update, inspect, or connect to provenance. Knowledge-intensive tasks therefore expose weaknesses even in strong pretrained generators. Retrieval-augmented generation adds explicit non-parametric memory so a model can consult passages from an external corpus rather than relying only on what its parameters retained during training."
+      },
+      {
+        "heading": "RAG formulations",
+        "text": "The system combines a pretrained sequence-to-sequence generator with a neural retriever over a dense Wikipedia index. RAG-Sequence conditions an entire generated sequence on the same retrieved document choice. RAG-Token allows the latent retrieved document to vary for each output token. In both formulations the retriever and generator are trained so retrieved passages contribute directly to generation likelihood."
+      },
+      {
+        "heading": "Evidence and provenance",
+        "text": "The paper evaluates open-domain question answering and other knowledge-intensive generation tasks. It reports state-of-the-art results on several QA benchmarks and finds that retrieval-supported generation can be more specific, diverse, and factual than a parametric-only baseline. Retrieved passages also provide a route to provenance, although generation is not automatically guaranteed to remain faithful to every retrieved fact."
+      }
+    ]
+  },
+  {
+    "paperId": "react-2022",
+    "title": "ReAct: Synergizing Reasoning and Acting in Language Models",
+    "year": 2022,
+    "sourceUrl": "https://arxiv.org/abs/2210.03629",
+    "abstract": "Prompts language models to interleave reasoning traces with task-specific actions so observations from tools or environments can update the next reasoning step.",
+    "authors": ["Shunyu Yao", "Jeffrey Zhao", "Dian Yu", "Nan Du", "Izhak Shafran", "Karthik Narasimhan", "Yuan Cao"],
+    "topics": ["Agents", "Reasoning", "Tool Use"],
+    "methods": ["Interleaved Reasoning and Acting", "In-Context Learning", "Tool-Augmented Language Models"],
+    "datasets": ["HotpotQA", "FEVER", "ALFWorld", "WebShop"],
+    "cites": [],
+    "sections": [
+      {
+        "heading": "Problem",
+        "text": "Reasoning traces and action generation had often been studied separately. A reasoning-only model can propagate an early unsupported assumption, while an action-only policy can make decisions without a legible plan. ReAct asks a model to alternate between verbal reasoning and task-specific actions, allowing each mode to correct and inform the other during a trajectory."
+      },
+      {
+        "heading": "Interaction pattern",
+        "text": "A ReAct trajectory contains thoughts, actions, and observations. Thoughts maintain goals, revise plans, and identify missing information. Actions query an external source or change an environment. The resulting observation is then available to the next reasoning step. This loop makes external evidence part of the ongoing decision process rather than a single retrieval step performed before reasoning begins."
+      },
+      {
+        "heading": "Evaluation",
+        "text": "The approach was studied on HotpotQA and FEVER with a Wikipedia interface, and on the interactive ALFWorld and WebShop environments. The paper reports reduced hallucination and error propagation in knowledge tasks and strong success improvements in the interactive benchmarks. The visible action-and-reasoning trajectory also makes behavior easier for a human to inspect than an opaque final answer."
+      }
+    ]
+  },
+  {
+    "paperId": "toolformer-2023",
+    "title": "Toolformer: Language Models Can Teach Themselves to Use Tools",
+    "year": 2023,
+    "sourceUrl": "https://arxiv.org/abs/2302.04761",
+    "abstract": "Introduces a self-supervised method for teaching a language model when and how to call external APIs while preserving general language-modeling ability.",
+    "authors": ["Timo Schick", "Jane Dwivedi-Yu", "Roberto Dessi", "Roberta Raileanu", "Maria Lomeli", "Luke Zettlemoyer", "Nicola Cancedda", "Thomas Scialom"],
+    "topics": ["Language Models", "Self-Supervision", "Tool Use"],
+    "methods": ["API Call Sampling", "Self-Supervised Tool Use", "Tool-Augmented Language Models"],
+    "datasets": [],
+    "cites": [],
+    "sections": [
+      {
+        "heading": "Problem",
+        "text": "Language models can generate fluent text yet still struggle with arithmetic, current factual lookup, translation, or calendar calculations that specialized tools solve reliably. Manually annotating large tool-use datasets is expensive. Toolformer investigates whether a model can create and filter its own API-call training examples from a small number of demonstrations."
+      },
+      {
+        "heading": "Self-supervised method",
+        "text": "The method samples possible API calls at many positions in ordinary text. It executes each candidate and measures whether inserting the result lowers the language-modeling loss for following tokens. Calls that provide sufficient improvement are retained as training data. The model is then fine-tuned to decide when a tool is useful, which arguments to supply, and how the returned value should influence subsequent text."
+      },
+      {
+        "heading": "Tools and results",
+        "text": "The experiments include a calculator, question-answering system, search engines, translation system, and calendar. The trained model improves zero-shot performance across several downstream tasks without losing its core language-modeling behavior. Unlike ReAct's prompted multi-step trajectories, Toolformer primarily learns inline API use through self-supervised fine-tuning."
+      }
+    ]
+  },
+  {
+    "paperId": "lost-middle-2023",
+    "title": "Lost in the Middle: How Language Models Use Long Contexts",
+    "year": 2023,
+    "sourceUrl": "https://arxiv.org/abs/2307.03172",
+    "abstract": "Evaluates how the position of relevant information inside long inputs affects language-model performance on multi-document QA and key-value retrieval.",
+    "authors": ["Nelson F. Liu", "Kevin Lin", "John Hewitt", "Ashwin Paranjape", "Michele Bevilacqua", "Fabio Petroni", "Percy Liang"],
+    "topics": ["Context Windows", "Evaluation", "Language Models"],
+    "methods": ["Key-Value Retrieval Evaluation", "Multi-Document Question Answering", "Position-Controlled Evaluation"],
+    "datasets": ["NaturalQuestions-Open"],
+    "cites": ["attention-2017"],
+    "sections": [
+      {
+        "heading": "Research question",
+        "text": "A longer context window does not guarantee that a model will use every part of the input equally well. The paper tests whether performance changes when the same relevant evidence is moved to different positions. This separates nominal context capacity from the ability to locate and use information reliably throughout that capacity."
+      },
+      {
+        "heading": "Evaluation design",
+        "text": "The study uses multi-document question answering and a controlled key-value retrieval task. Relevant documents or key-value pairs are placed near the beginning, middle, or end of a long context while other content remains distracting. Comparing these positions reveals sensitivity that a single aggregate benchmark score can hide."
+      },
+      {
+        "heading": "Finding and implication",
+        "text": "Performance is commonly strongest when relevant information appears near the beginning or end and weaker when that information sits in the middle. This U-shaped pattern appears even for models designed for long inputs. Retrieval and context assembly therefore remain important: supplying fewer, well-ranked pieces of evidence can be more dependable than placing an undifferentiated large corpus into one prompt."
+      }
+    ]
+  },
+  {
+    "paperId": "graphrag-2024",
+    "title": "From Local to Global: A Graph RAG Approach to Query-Focused Summarization",
+    "year": 2024,
+    "sourceUrl": "https://arxiv.org/abs/2404.16130",
+    "abstract": "Builds an entity graph and hierarchical community summaries to answer global sensemaking questions over large document collections.",
+    "authors": ["Darren Edge", "Ha Trinh", "Newman Cheng", "Joshua Bradley", "Alex Chao", "Apurva Mody", "Steven Truitt", "Jonathan Larson"],
+    "topics": ["GraphRAG", "Knowledge Graphs", "Retrieval-Augmented Generation", "Summarization"],
+    "methods": ["Community Detection", "Community Summarization", "Entity Knowledge Graph", "Map-Reduce Answering"],
+    "datasets": [],
+    "cites": ["rag-2020"],
+    "sections": [
+      {
+        "heading": "Global-query problem",
+        "text": "Conventional retrieval-augmented generation is effective when a question points to a small number of locally relevant passages. It is weaker for corpus-wide questions such as identifying the main themes in an entire collection. Those global questions require evidence distributed across many documents, while returning every passage would overwhelm the context window."
+      },
+      {
+        "heading": "Graph index",
+        "text": "The approach first extracts entities and relationships from source text to create a knowledge graph. It then partitions that graph into communities at multiple levels and generates a summary for each community. These summaries form a hierarchical index of the corpus, preserving broader structure that flat chunk retrieval does not explicitly represent."
+      },
+      {
+        "heading": "Global answering",
+        "text": "For a global question, relevant community summaries produce partial responses that are combined into a final answer. This resembles a map-reduce process over graph communities. Experiments on large corpora report improvements in answer comprehensiveness and diversity over a naive RAG baseline. The method trades additional indexing and summarization cost for better corpus-level sensemaking."
+      }
+    ]
+  }
+]

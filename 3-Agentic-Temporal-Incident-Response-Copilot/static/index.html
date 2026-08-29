@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A read-only, agentic Neo4j incident investigation workbench.">
+    <title>Northstar Ops · Temporal GraphRAG</title>
+    <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/static/styles.css?v=3.0.9">
+  </head>
+  <body>
+    <a class="skip-link" href="#questionInput">Skip to investigation prompt</a>
+    <header class="masthead">
+      <div class="brand-lockup">
+        <div class="brand-mark" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+        <div>
+          <p class="eyebrow">Northstar Commerce · Operations graph</p>
+          <h1>Incident fieldroom</h1>
+        </div>
+      </div>
+      <div class="runtime-strip" aria-label="Runtime status">
+        <span class="status-light" id="statusLight"></span>
+        <span id="statusText">Connecting</span>
+        <span class="runtime-divider"></span>
+        <span id="modelName">Agent model</span>
+        <span class="read-only-pill">Read only</span>
+      </div>
+    </header>
+
+    <main class="fieldroom">
+      <aside class="investigation-rail" id="caseFilePanel" aria-label="Investigation conversation">
+        <section class="case-control">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Investigation Pane</p>
+              <h2>Select an incident</h2>
+            </div>
+            <button class="text-button" id="newSessionButton" type="button">New investigation</button>
+          </div>
+          <label class="select-shell" for="incidentSelect">
+            <span class="sr-only">Incident</span>
+            <select id="incidentSelect" aria-label="Incident"></select>
+          </label>
+          <div class="case-summary" id="caseSummary">
+            <span class="skeleton short"></span>
+            <span class="skeleton"></span>
+          </div>
+        </section>
+
+        <section class="conversation" aria-label="Conversation">
+          <div class="conversation-log" id="conversationLog" aria-live="polite">
+            <article class="message message-system">
+              <span class="message-label">Field note</span>
+              <p>Choose a case or ask directly. The investigator will assemble evidence through bounded, read-only graph tools.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="prompt-dock">
+          <div class="prompt-suggestions" id="promptSuggestions" aria-label="Example investigations"></div>
+          <form id="investigationForm">
+            <label for="questionInput">Investigation question</label>
+            <textarea id="questionInput" rows="4" maxlength="1600" required placeholder="What changed before INC-104, and what evidence contradicts the leading hypothesis?"></textarea>
+            <div class="prompt-actions">
+              <span id="promptHint">Bounded to 5 agent rounds</span>
+              <button class="primary-button" id="investigateButton" type="submit">
+                <span>Investigate</span>
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 6l4 4-4 4"/></svg>
+              </button>
+            </div>
+          </form>
+        </section>
+      </aside>
+
+      <div
+        class="column-resizer"
+        id="caseFileResizer"
+        role="separator"
+        tabindex="0"
+        aria-label="Resize Investigation Pane and Service topology overview columns"
+        aria-controls="caseFilePanel topologyPanel"
+        aria-orientation="vertical"
+        aria-valuemin="260"
+        aria-valuemax="900"
+        aria-valuenow="330"
+        title="Drag to resize Investigation Pane. Double-click to reset."
+      ></div>
+
+      <section class="graph-desk" id="topologyPanel" aria-label="Operational graph and timeline">
+        <div class="desk-header">
+          <div>
+            <p class="eyebrow" style="font-size: 15px;">Live evidence canvas</p>
+            <h2>Service topology overview</h2>
+          </div>
+          <div class="graph-legend" aria-label="Graph legend" style="font-size: 1rem;">
+            <span><i class="legend-node impacted"></i>Observed impact</span>
+            <span><i class="legend-node evidence"></i>Agent evidence</span>
+            <span><i class="legend-line"></i>Depends on</span>
+          </div>
+          <div class="graph-controls" aria-label="Graph controls">
+            <button type="button" id="zoomOutButton" aria-label="Zoom out">−</button>
+            <button type="button" id="resetGraphButton">Reset</button>
+            <button type="button" id="zoomInButton" aria-label="Zoom in">+</button>
+          </div>
+        </div>
+
+        <div class="topology-stage" id="topologyStage">
+          <div class="axis-label axis-client" style="font-size: 1rem;">Client edge</div>
+          <div class="axis-label axis-core" style="font-size: 1rem;">Core services</div>
+          <div class="axis-label axis-dependencies" style="font-size: 1rem;">Deep dependencies</div>
+          <svg id="topologySvg" viewBox="0 0 940 470" role="img" aria-labelledby="topologyTitle">
+            <title id="topologyTitle">Northstar Commerce service dependency topology</title>
+            <defs>
+              <marker id="arrowHead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z"></path>
+              </marker>
+            </defs>
+            <g id="topologyViewport"></g>
+          </svg>
+          <div class="node-inspector" id="nodeInspector" hidden></div>
+        </div>
+
+        <div
+          class="timeline-resizer"
+          id="timelineResizer"
+          role="separator"
+          tabindex="0"
+          aria-label="Resize Temporal Context height"
+          aria-controls="timelinePanel"
+          aria-orientation="horizontal"
+          aria-valuemin="150"
+          aria-valuemax="500"
+          aria-valuenow="250"
+          title="Drag the top edge to resize Temporal Context. Double-click to reset."
+        ></div>
+
+        <section class="timeline-panel" id="timelinePanel" aria-labelledby="timelineHeading">
+          <div class="timeline-heading-row">
+            <div>
+              <p class="eyebrow">Temporal context</p>
+              <h3 id="timelineHeading">Incident timeline</h3>
+            </div>
+            <p id="timelineRange">Select an incident to load its sequence.</p>
+          </div>
+          <div class="timeline-scroll">
+            <div class="timeline-track" id="timelineTrack"></div>
+          </div>
+        </section>
+
+        <footer class="desk-stats" aria-label="Graph statistics">
+          <span><strong id="serviceCount">—</strong> services</span>
+          <span><strong id="incidentCount">—</strong> incidents</span>
+          <span><strong id="deploymentCount">—</strong> deployments</span>
+          <span><strong id="chunkCount">—</strong> grounded chunks</span>
+        </footer>
+      </section>
+
+      <div
+        class="column-resizer"
+        id="dossierResizer"
+        role="separator"
+        tabindex="0"
+        aria-label="Resize Service topology overview and Agent Dossier columns"
+        aria-controls="topologyPanel dossierPanel"
+        aria-orientation="vertical"
+        aria-valuemin="260"
+        aria-valuemax="1200"
+        aria-valuenow="1080"
+        title="Drag to resize Agent Dossier. Double-click to reset."
+      ></div>
+
+      <aside class="evidence-dossier" id="dossierPanel" aria-label="Investigation report">
+        <div class="dossier-header">
+          <div>
+            <p class="eyebrow">Agent dossier</p>
+            <h2 id="reportTitle">Awaiting investigation</h2>
+          </div>
+          <button class="icon-button" id="copyReportButton" type="button" disabled aria-label="Copy report">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="6" y="6" width="9" height="10" rx="1"/><path d="M4 13H3V3h9v1"/></svg>
+          </button>
+        </div>
+
+        <div class="dossier-tabs" role="tablist" aria-label="Dossier views">
+          <button class="tab-button active" type="button" role="tab" aria-selected="true" data-tab="report">Report</button>
+          <button class="tab-button" type="button" role="tab" aria-selected="false" data-tab="evidence">Evidence <span id="evidenceBadge">0</span></button>
+          <button class="tab-button" type="button" role="tab" aria-selected="false" data-tab="trace">Agent trace <span id="traceBadge">0</span></button>
+        </div>
+
+        <div class="dossier-body">
+          <section class="tab-panel active" id="reportPanel" role="tabpanel">
+            <div class="report-empty" id="reportEmpty">
+              <div class="empty-glyph" aria-hidden="true"><span></span><span></span><span></span></div>
+              <h3>No conclusions yet</h3>
+              <p>The report will keep observations, hypotheses, contradictory evidence, and proposed checks visibly separate.</p>
+            </div>
+            <div id="reportContent" hidden></div>
+          </section>
+          <section class="tab-panel" id="evidencePanel" role="tabpanel" hidden>
+            <div class="evidence-list" id="evidenceList"></div>
+          </section>
+          <section class="tab-panel" id="tracePanel" role="tabpanel" hidden>
+            <ol class="trace-list" id="traceList"></ol>
+          </section>
+        </div>
+
+        <div class="dossier-metrics" id="dossierMetrics" hidden>
+          <span><strong id="toolCallMetric">0</strong> tool calls</span>
+          <span><strong id="evidenceMetric">0</strong> sources</span>
+          <span><strong id="latencyMetric">0s</strong> elapsed</span>
+        </div>
+      </aside>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="/static/app.js?v=3.0.4" defer></script>
+  </body>
+</html>

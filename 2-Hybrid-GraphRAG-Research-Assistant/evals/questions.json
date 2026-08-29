@@ -1,0 +1,52 @@
+[
+  {
+    "id": "transformer-no-recurrence",
+    "question": "How does self-attention let the Transformer avoid recurrent sequence processing?",
+    "expectedPaperIds": ["attention-2017"]
+  },
+  {
+    "id": "bert-masking",
+    "question": "What role does masked language modeling play in BERT pretraining?",
+    "expectedPaperIds": ["bert-2018"]
+  },
+  {
+    "id": "dpr-dual-encoder",
+    "question": "How does a dual encoder retrieve passages without relying on exact keyword overlap?",
+    "expectedPaperIds": ["dpr-2020"]
+  },
+  {
+    "id": "rag-memory",
+    "question": "How does retrieval-augmented generation combine parametric and non-parametric memory?",
+    "expectedPaperIds": ["rag-2020"]
+  },
+  {
+    "id": "react-loop",
+    "question": "How does ReAct use observations from external actions to update reasoning?",
+    "expectedPaperIds": ["react-2022"]
+  },
+  {
+    "id": "toolformer-supervision",
+    "question": "How can a language model create its own training examples for API calls?",
+    "expectedPaperIds": ["toolformer-2023"]
+  },
+  {
+    "id": "middle-position",
+    "question": "Why can relevant evidence be missed when it appears in the middle of a long prompt?",
+    "expectedPaperIds": ["lost-middle-2023"]
+  },
+  {
+    "id": "global-graphrag",
+    "question": "How do graph communities and their summaries support global questions over a corpus?",
+    "expectedPaperIds": ["graphrag-2024"]
+  },
+  {
+    "id": "agent-comparison",
+    "question": "Compare prompted reasoning-action trajectories with self-supervised inline tool calls.",
+    "expectedPaperIds": ["react-2022", "toolformer-2023"]
+  },
+  {
+    "id": "negative-sourdough",
+    "question": "What hydration percentage should I use for a sourdough loaf?",
+    "expectedPaperIds": []
+  }
+]

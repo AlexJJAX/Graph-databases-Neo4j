@@ -1,0 +1,118 @@
+{
+  "institution": {"name": "Northstar Financial", "currency": "GBP", "asOf": "2026-08-16T06:00:00Z"},
+  "persons": [
+    {"personId": "P-101", "name": "Lina Voss", "riskTier": "standard", "accountIds": ["A-101"], "deviceIds": ["D-900"], "addressIds": ["ADDR-901"], "phoneIds": ["PH-900"]},
+    {"personId": "P-102", "name": "Marcus Reed", "riskTier": "standard", "accountIds": ["A-102"], "deviceIds": ["D-900"], "addressIds": ["ADDR-902"], "phoneIds": ["PH-900"]},
+    {"personId": "P-103", "name": "Noah Shaw", "riskTier": "standard", "accountIds": ["A-103"], "deviceIds": ["D-900", "D-103"], "addressIds": ["ADDR-903"], "phoneIds": ["PH-103"]},
+    {"personId": "P-201", "name": "Elise Hart", "riskTier": "standard", "accountIds": ["A-201"], "deviceIds": ["D-201"], "addressIds": ["ADDR-201"], "phoneIds": ["PH-201"]},
+    {"personId": "P-202", "name": "Owen Price", "riskTier": "standard", "accountIds": ["A-202"], "deviceIds": ["D-202"], "addressIds": ["ADDR-202"], "phoneIds": ["PH-202"]},
+    {"personId": "P-001", "name": "Alice Morgan", "riskTier": "low", "accountIds": ["A-001"], "deviceIds": ["D-001"], "addressIds": ["ADDR-001"], "phoneIds": ["PH-001"]},
+    {"personId": "P-002", "name": "Daniel Morgan", "riskTier": "low", "accountIds": ["A-002"], "deviceIds": ["D-001", "D-002"], "addressIds": ["ADDR-001"], "phoneIds": ["PH-002"]},
+    {"personId": "P-301", "name": "Sofia Bell", "riskTier": "low", "accountIds": ["A-301"], "deviceIds": ["D-301"], "addressIds": ["ADDR-301"], "phoneIds": ["PH-301"]},
+    {"personId": "P-401", "name": "Eva Cross", "riskTier": "high", "accountIds": ["A-401"], "deviceIds": ["D-800"], "addressIds": ["ADDR-801"], "phoneIds": ["PH-800"]},
+    {"personId": "P-402", "name": "Theo Knox", "riskTier": "high", "accountIds": ["A-402"], "deviceIds": ["D-800"], "addressIds": ["ADDR-802"], "phoneIds": ["PH-800"]}
+  ],
+  "accounts": [
+    {"accountId": "A-101", "product": "current", "openedAt": "2026-06-11", "status": "active", "balance": 1840.0},
+    {"accountId": "A-102", "product": "current", "openedAt": "2026-06-13", "status": "active", "balance": 790.0},
+    {"accountId": "A-103", "product": "wallet", "openedAt": "2026-06-15", "status": "restricted", "balance": 105.0},
+    {"accountId": "A-201", "product": "current", "openedAt": "2022-03-20", "status": "active", "balance": 3140.0},
+    {"accountId": "A-202", "product": "current", "openedAt": "2024-09-05", "status": "active", "balance": 2790.0},
+    {"accountId": "A-001", "product": "current", "openedAt": "2018-01-10", "status": "active", "balance": 5200.0},
+    {"accountId": "A-002", "product": "current", "openedAt": "2019-04-21", "status": "active", "balance": 1800.0},
+    {"accountId": "A-301", "product": "business", "openedAt": "2020-11-04", "status": "active", "balance": 18200.0},
+    {"accountId": "A-401", "product": "wallet", "openedAt": "2025-01-02", "status": "closed", "balance": 0.0},
+    {"accountId": "A-402", "product": "wallet", "openedAt": "2025-01-03", "status": "closed", "balance": 0.0}
+  ],
+  "devices": [
+    {"deviceId": "D-900", "fingerprint": "fp-77a9", "kind": "mobile", "trust": "new"},
+    {"deviceId": "D-103", "fingerprint": "fp-103", "kind": "mobile", "trust": "known"},
+    {"deviceId": "D-201", "fingerprint": "fp-201", "kind": "mobile", "trust": "known"},
+    {"deviceId": "D-202", "fingerprint": "fp-202", "kind": "web", "trust": "known"},
+    {"deviceId": "D-001", "fingerprint": "fp-home-1", "kind": "tablet", "trust": "known"},
+    {"deviceId": "D-002", "fingerprint": "fp-002", "kind": "mobile", "trust": "known"},
+    {"deviceId": "D-301", "fingerprint": "fp-301", "kind": "web", "trust": "known"},
+    {"deviceId": "D-800", "fingerprint": "fp-44b1", "kind": "mobile", "trust": "blocked"}
+  ],
+  "addresses": [
+    {"addressId": "ADDR-901", "masked": "14 *** Road, Leeds", "postcodeSector": "LS1"},
+    {"addressId": "ADDR-902", "masked": "83 *** Street, Leeds", "postcodeSector": "LS2"},
+    {"addressId": "ADDR-903", "masked": "6 *** Walk, York", "postcodeSector": "YO1"},
+    {"addressId": "ADDR-201", "masked": "10 *** Lane, Bristol", "postcodeSector": "BS1"},
+    {"addressId": "ADDR-202", "masked": "22 *** Close, Bath", "postcodeSector": "BA1"},
+    {"addressId": "ADDR-001", "masked": "41 *** Avenue, London", "postcodeSector": "N10"},
+    {"addressId": "ADDR-301", "masked": "8 *** Square, London", "postcodeSector": "EC2"},
+    {"addressId": "ADDR-801", "masked": "19 *** Road, Kent", "postcodeSector": "ME1"},
+    {"addressId": "ADDR-802", "masked": "52 *** Drive, Kent", "postcodeSector": "ME2"}
+  ],
+  "phones": [
+    {"phoneId": "PH-900", "masked": "+44 *** 0900", "country": "GB"},
+    {"phoneId": "PH-103", "masked": "+44 *** 0103", "country": "GB"},
+    {"phoneId": "PH-201", "masked": "+44 *** 0201", "country": "GB"},
+    {"phoneId": "PH-202", "masked": "+44 *** 0202", "country": "GB"},
+    {"phoneId": "PH-001", "masked": "+44 *** 0001", "country": "GB"},
+    {"phoneId": "PH-002", "masked": "+44 *** 0002", "country": "GB"},
+    {"phoneId": "PH-301", "masked": "+44 *** 0301", "country": "GB"},
+    {"phoneId": "PH-800", "masked": "+44 *** 0800", "country": "GB"}
+  ],
+  "merchants": [
+    {"merchantId": "M-900", "name": "Orion Digital Goods", "category": "digital_goods", "country": "GB", "riskLevel": "elevated"},
+    {"merchantId": "M-001", "name": "Riverside Grocer", "category": "grocery", "country": "GB", "riskLevel": "low"},
+    {"merchantId": "M-002", "name": "City Rail", "category": "transport", "country": "GB", "riskLevel": "low"},
+    {"merchantId": "M-800", "name": "Nova Voucher Exchange", "category": "digital_goods", "country": "GB", "riskLevel": "blocked"}
+  ],
+  "transactions": [
+    {"transactionId": "T-9001", "senderAccountId": "A-201", "receiverAccountId": "A-101", "amount": 950.0, "currency": "GBP", "occurredAt": "2026-08-16T08:00:00Z", "channel": "faster_payment", "deviceId": "D-201", "status": "settled"},
+    {"transactionId": "T-9002", "senderAccountId": "A-202", "receiverAccountId": "A-101", "amount": 875.0, "currency": "GBP", "occurredAt": "2026-08-16T08:03:00Z", "channel": "faster_payment", "deviceId": "D-202", "status": "settled"},
+    {"transactionId": "T-9003", "senderAccountId": "A-101", "receiverAccountId": "A-102", "amount": 1700.0, "currency": "GBP", "occurredAt": "2026-08-16T08:07:00Z", "channel": "faster_payment", "deviceId": "D-900", "status": "settled"},
+    {"transactionId": "T-9004", "senderAccountId": "A-102", "receiverAccountId": "A-103", "amount": 1650.0, "currency": "GBP", "occurredAt": "2026-08-16T08:11:00Z", "channel": "wallet_transfer", "deviceId": "D-900", "status": "settled"},
+    {"transactionId": "T-9005", "senderAccountId": "A-103", "receiverAccountId": "A-101", "amount": 1600.0, "currency": "GBP", "occurredAt": "2026-08-16T08:16:00Z", "channel": "wallet_transfer", "deviceId": "D-900", "status": "settled"},
+    {"transactionId": "T-9006", "senderAccountId": "A-103", "merchantId": "M-900", "amount": 48.0, "currency": "GBP", "occurredAt": "2026-08-16T08:19:00Z", "channel": "card_not_present", "deviceId": "D-900", "status": "settled"},
+    {"transactionId": "T-9007", "senderAccountId": "A-101", "merchantId": "M-900", "amount": 1450.0, "currency": "GBP", "occurredAt": "2026-08-16T08:22:00Z", "channel": "card_not_present", "deviceId": "D-900", "status": "settled"},
+    {"transactionId": "T-1001", "senderAccountId": "A-301", "receiverAccountId": "A-001", "amount": 2500.0, "currency": "GBP", "occurredAt": "2026-08-01T09:00:00Z", "channel": "salary", "deviceId": "D-301", "status": "settled"},
+    {"transactionId": "T-1002", "senderAccountId": "A-001", "receiverAccountId": "A-002", "amount": 400.0, "currency": "GBP", "occurredAt": "2026-08-02T12:00:00Z", "channel": "faster_payment", "deviceId": "D-001", "status": "settled"},
+    {"transactionId": "T-1003", "senderAccountId": "A-001", "merchantId": "M-001", "amount": 82.4, "currency": "GBP", "occurredAt": "2026-08-03T17:30:00Z", "channel": "card_present", "deviceId": "D-001", "status": "settled"},
+    {"transactionId": "T-1004", "senderAccountId": "A-002", "merchantId": "M-002", "amount": 64.2, "currency": "GBP", "occurredAt": "2026-08-04T07:15:00Z", "channel": "card_present", "deviceId": "D-002", "status": "settled"},
+    {"transactionId": "T-8001", "senderAccountId": "A-401", "receiverAccountId": "A-402", "amount": 1200.0, "currency": "GBP", "occurredAt": "2025-02-10T10:01:00Z", "channel": "wallet_transfer", "deviceId": "D-800", "status": "settled"},
+    {"transactionId": "T-8002", "senderAccountId": "A-402", "merchantId": "M-800", "amount": 1175.0, "currency": "GBP", "occurredAt": "2025-02-10T10:05:00Z", "channel": "card_not_present", "deviceId": "D-800", "status": "settled"}
+  ],
+  "alerts": [
+    {"alertId": "ALRT-9001", "title": "Rapid circulation with shared identifiers", "severity": "high", "status": "open", "createdAt": "2026-08-16T08:18:00Z", "reason": "Three accounts circulated similar values within nine minutes from one device.", "accountIds": ["A-101", "A-102", "A-103"], "transactionIds": ["T-9003", "T-9004", "T-9005"], "caseId": "CASE-9001"},
+    {"alertId": "ALRT-9002", "title": "Concentrated digital-goods cash-out", "severity": "high", "status": "open", "createdAt": "2026-08-16T08:23:00Z", "reason": "A newly linked cluster sent a high proportion of recent inflow to one merchant.", "accountIds": ["A-101", "A-103"], "transactionIds": ["T-9006", "T-9007"], "caseId": "CASE-9001"},
+    {"alertId": "ALRT-1001", "title": "Shared household device", "severity": "low", "status": "closed", "createdAt": "2026-08-02T12:05:00Z", "reason": "Two established customers used one tablet and address.", "accountIds": ["A-001", "A-002"], "transactionIds": ["T-1002"], "caseId": null},
+    {"alertId": "ALRT-8001", "title": "Historical mule wallet pair", "severity": "high", "status": "closed", "createdAt": "2025-02-10T10:06:00Z", "reason": "Shared device and phone preceded rapid onward spend.", "accountIds": ["A-401", "A-402"], "transactionIds": ["T-8001", "T-8002"], "caseId": "CASE-8001"}
+  ],
+  "cases": [
+    {"caseId": "CASE-9001", "title": "Leeds circulation cluster", "status": "investigating", "priority": "P1", "openedAt": "2026-08-16T08:25:00Z", "alertIds": ["ALRT-9001", "ALRT-9002"], "assignee": "Unassigned"},
+    {"caseId": "CASE-8001", "title": "Kent wallet mule pair", "status": "closed", "priority": "P2", "openedAt": "2025-02-10T10:10:00Z", "alertIds": ["ALRT-8001"], "assignee": "Financial Crime Ops"}
+  ],
+  "documents": [
+    {"documentId": "TYPO-001", "documentType": "typology", "title": "Rapid circulation and mule-ring indicators", "relatedAccountIds": [], "relatedDeviceIds": [], "relatedMerchantIds": [], "sections": [
+      {"heading": "Pattern", "text": "Rapid movement of materially similar values through three or more accounts can indicate layering or mule coordination when the elapsed time is short."},
+      {"heading": "Corroboration", "text": "Shared devices, phones, addresses, young accounts, fan-in before circulation, and concentrated cash-out strengthen the pattern. No single shared identifier proves common control."},
+      {"heading": "Alternative explanations", "text": "Households, carers, shared workplaces, payment retries, and legitimate treasury flows can create overlap. Review tenure, transaction purpose, normal behaviour, and customer relationships."}
+    ]},
+    {"documentId": "TYPO-002", "documentType": "typology", "title": "Shared identifier investigation guide", "relatedAccountIds": [], "relatedDeviceIds": [], "relatedMerchantIds": [], "sections": [
+      {"heading": "Entity resolution", "text": "Treat a shared device, phone, or address as a relationship signal. Compare how many independent identifiers overlap and whether linked accounts transact with one another."},
+      {"heading": "Benign overlap", "text": "Long account tenure, a shared residential address, distinct personal phones, ordinary household transfers, and unrelated spending are evidence consistent with a benign household."}
+    ]},
+    {"documentId": "TYPO-003", "documentType": "typology", "title": "Digital-goods merchant cash-out", "relatedAccountIds": [], "relatedDeviceIds": [], "relatedMerchantIds": [], "sections": [
+      {"heading": "Pattern", "text": "A cluster that directs a large share of recent inbound funds to a single digital-goods or voucher merchant may be converting funds into transferable value."},
+      {"heading": "Checks", "text": "Check merchant history, refund behaviour, delivery evidence, account age, source-of-funds context, and whether the merchant appears across otherwise connected clusters."}
+    ]},
+    {"documentId": "POL-001", "documentType": "policy", "title": "Grounded fraud investigation standard", "relatedAccountIds": [], "relatedDeviceIds": [], "relatedMerchantIds": [], "sections": [
+      {"heading": "Evidence standard", "text": "Separate observed facts from derived graph patterns and typology matches. Use suspected or consistent-with language; an alert is not a determination of fraud."},
+      {"heading": "Proportionality", "text": "Document contradictory and benign evidence before escalation. Recommend reversible checks and human review; do not automatically block a customer based only on graph proximity."},
+      {"heading": "Data gaps", "text": "State missing KYC, device telemetry, IP history, payment narrative, counterparty-bank information, merchant fulfilment, and customer-contact evidence when relevant."}
+    ]},
+    {"documentId": "CASE-RPT-8001", "documentType": "case_report", "title": "Closed case: Kent wallet mule pair", "relatedAccountIds": ["A-401", "A-402"], "relatedDeviceIds": ["D-800"], "relatedMerchantIds": ["M-800"], "sections": [
+      {"heading": "Observed network", "text": "Accounts A-401 and A-402 shared device D-800 and phone PH-800. A-401 transferred GBP 1,200 to A-402, which spent GBP 1,175 at Nova Voucher Exchange four minutes later."},
+      {"heading": "Resolution", "text": "The accounts were closed after customer contact, device telemetry, and voucher redemption records supported coordinated third-party control. The graph pattern alone was not the decision basis."},
+      {"heading": "Reusable lesson", "text": "The combination of multiple shared identifiers, fast pass-through, and concentrated digital-goods spend was more discriminating than any individual signal."}
+    ]},
+    {"documentId": "BENIGN-RPT-1001", "documentType": "case_report", "title": "Closed alert: Morgan household tablet", "relatedAccountIds": ["A-001", "A-002"], "relatedDeviceIds": ["D-001"], "relatedMerchantIds": [], "sections": [
+      {"heading": "Observed network", "text": "A-001 and A-002 shared a residential address and household tablet but used distinct phones. Their only direct payment was a regular GBP 400 household transfer."},
+      {"heading": "Resolution", "text": "Long tenure, ordinary salary and household spend, and verified family relationship supported closure as benign shared access."}
+    ]}
+  ]
+}
